@@ -3,6 +3,7 @@ const Pool = require('pg').Pool
 
 
   const getQueryData = ({database, query}) => {
+	  
     const pool = new Pool({
       user: 'postgres',
       host: 'localhost',
