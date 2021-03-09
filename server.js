@@ -1,6 +1,7 @@
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const cors = require('cors');
+const pg = require('./pg.util');
 const knex = require('knex')({
     client: 'pg',
     connection: {
@@ -12,6 +13,7 @@ const register = require('./controllers/register')
 const signin = require('./controllers/signin')
 const profile = require('./controllers/profile')
 const image = require('./controllers/image')
+
 
 
 
@@ -33,6 +35,16 @@ app.post('/register',  register.handleRegister(knex, bcrypt));
 app.get('/profile/:id', (req, res) => {profile.handleProfileGet(req, res, knex)});
 app.put('/image', (req, res) => {image.handleImage(req, res, knex)});
 app.post('/imageurl', (req, res) => {image.handleAPICall(req, res)});
+
+app.post('/query', (req, res) => {
+  pg.getQueryData(req.body)
+  .then(response=>{
+      res.status(200).send(response);
+  })
+  .catch(error =>{
+      res.status(500).send(error);
+  })
+})
  
 
 app.listen(process.env.PORT || 3000, () =>{
